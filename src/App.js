@@ -6,6 +6,8 @@ import FoodProvider from "./context/FoodContext/FoodProvider";
 import Page from "./containers/Page/Page";
 import Recipes from "./containers/Recipes/Recipes";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
+import LoginPage from "./containers/LoginPage/LoginPage";
+import RegisterPage from "./containers/RegisterPage/RegisterPage"
 
 import "./tailwind.generated.css";
 
@@ -23,6 +25,8 @@ function App() {
                 <FoodProvider>
                     <Switch>
                         <Route path="/" exact component={Page} />
+                        <Route path="/login" component={LoginPage} />
+                        <Route path="/register" component={RegisterPage} />
                         <Route path="/food/:id" component={Recipes} />
                         <Route component={PageNotFound} />
                     </Switch>

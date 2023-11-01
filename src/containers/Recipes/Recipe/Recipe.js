@@ -159,6 +159,11 @@ function Recipe(props) {
         </div>
       </div>
     );
+
+    // comment = (
+    //   <div className={props.expand}>
+
+    //   </div>)
   }
 
   return <Fragment>{food}</Fragment>;

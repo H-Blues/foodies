@@ -4,7 +4,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ThemeContext from "../../context/ThemeContext/ThemeContext";
 import "../../tailwind.generated.css";
 
-//////////////////// This is where the Search Takes Place
+// This is where the Search Takes Place
 
 class SearchBox extends Component {
     constructor(props) {

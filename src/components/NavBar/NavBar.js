@@ -56,6 +56,11 @@ function NavBar() {
                 </Link>
             </div>
             <div className="sm:block flex-grow flex items-center w-auto">
+                <Link to="Login/">
+                    <span className="font-semibold ml-2 text-xl tracking-tight">
+                        Login
+                    </span>         
+                </Link>
                 <div className="text-md flex-grow text-right">
                     <button
                         onClick={themeChanger}
