@@ -9,6 +9,7 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.1.0",
