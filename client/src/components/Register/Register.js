@@ -13,10 +13,11 @@ const Register = () => {
   const handleRegister = async () => {
     const result = await signup(username, email, password);
     if (result.success) {
-      alert("Register Successfully!")
+      alert("Register Successfully!");
       history.push('/login');
     } else {
-      alert("Fail to register.")
+      alert("Fail to register.");
+      return;
     }
   };
 

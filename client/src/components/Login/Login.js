@@ -10,11 +10,12 @@ const Login = () => {
   const history = useHistory();
 
   const handleLogin = async () => {
-    const result = await login(username, password)
+    const result = await login(username, password);
     if (result.success) {
       history.push('/');
     } else {
-      alert("Password wrong. Please Try again.")
+      alert("Password wrong. Please Try again.");
+      return;
     }
   };
 
