@@ -1,16 +1,21 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { login } from '../../api';
 import ThemeContext from '../../context/ThemeContext/ThemeContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const history = useHistory();
   const { theme } = useContext(ThemeContext);
+  const history = useHistory();
 
-  const handleLogin = () => {
-
-    history.push('/');
+  const handleLogin = async () => {
+    const result = await login(username, password)
+    if (result.success) {
+      history.push('/');
+    } else {
+      alert("Password wrong. Please Try again.")
+    }
   };
 
   const handleRegisterClick = () => {

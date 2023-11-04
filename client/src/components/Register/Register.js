@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { signup } from '../../api';
 import ThemeContext from '../../context/ThemeContext/ThemeContext';
 
 const Register = () => {
@@ -9,11 +10,14 @@ const Register = () => {
   const history = useHistory();
   const { theme } = useContext(ThemeContext);
 
-  const handleRegister = () => {
-    // 处理注册逻辑，可以发送请求到服务器进行用户注册
-
-    // 注册成功后跳转到登录界面（或其他页面）
-    history.push('/login');
+  const handleRegister = async () => {
+    const result = await signup(username, email, password);
+    if (result.success) {
+      alert("Register Successfully!")
+      history.push('/login');
+    } else {
+      alert("Fail to register.")
+    }
   };
 
   const containerStyle = {

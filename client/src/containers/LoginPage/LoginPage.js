@@ -6,11 +6,11 @@ import Login from "../../components/Login/Login";
 
 const LoginPage = () => {
   return (
-      <Fragment>
-          <NavBar />
-          <Login />
-          <Footer />
-      </Fragment>
+    <Fragment>
+      <NavBar />
+      <Login />
+      <Footer />
+    </Fragment>
   );
 };
 
