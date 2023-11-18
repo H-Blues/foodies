@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import passport from './authenticate/index.js';
 import usersRouter from './api/user/index.js';
+import recipeRouter from './api/recipe/index.js';
 import './db/index.js';
 import './seed/index.js';
 
@@ -21,6 +22,7 @@ app.use(express.json());  // This line should be before useRoutes -- important
 app.use(passport.initialize());
 
 app.use('/api/user', usersRouter);
+app.use('/api/recipe', recipeRouter);
 // app.use('/api/genres', genresRouter);
 // app.use('/api/movies', passport.authenticate('jwt', { session: false }), moviesRouter);
 // app.use('/api/tv', passport.authenticate('jwt', { session: false }), tvRouter);
