@@ -5,10 +5,12 @@ import Brightness5Icon from "@material-ui/icons/Brightness5";
 import { Link } from "react-router-dom";
 
 import ThemeContext from "../../context/ThemeContext/ThemeContext";
+import UserContext from "../../context/UserContext/UserContext";
 import "../../tailwind.generated.css";
 
 function NavBar() {
     const context = useContext(ThemeContext);
+    const { userInfo, isAuthenticated } = useContext(UserContext)
 
     let mode;
 
@@ -56,11 +58,21 @@ function NavBar() {
                 </Link>
             </div>
             <div className="sm:block flex-grow flex items-center w-auto">
-                <Link to="Login/">
-                    <span className="font-semibold ml-2 text-xl tracking-tight">
-                        Login
-                    </span>         
-                </Link>
+                {
+                    isAuthenticated ? (
+                        <Link to="/user">
+                            <span className="font-semibold ml-2 text-xl tracking-tight">
+                                {userInfo.username}
+                            </span>
+                        </Link>) : (
+                        <Link to="Login/">
+                            <span className="font-semibold ml-2 text-xl tracking-tight">
+                                Login
+                            </span>
+                        </Link>
+                    )
+                }
+
                 <div className="text-md flex-grow text-right">
                     <button
                         onClick={themeChanger}
