@@ -24,47 +24,48 @@ router.post('/', asyncHandler(async (req, res, next) => {
     try {
       await User.create(req.body);
       responseHandler.created(res, 'Successful created new user.');
+      return;
     } catch (error) {
       responseHandler.badRequest(res, 'Duplicated username. Enter a new username.');
+      return;
     }
   } else {
     const user = await User.findByUserName(req.body.username);
-    if (!user) responseHandler.notFound(res, 'Authentication failed. User not found.');
+    if (!user) {
+      responseHandler.notFound(res, 'Authentication failed. User not found.');
+      return;
+    };
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
         const token = jwt.sign(user.username, process.env.SECRET);
         responseHandler.success(res, 'Authenticated.', { token: 'BEARER ' + token, user: user });
+        return;
       } else {
         responseHandler.badRequest(res, 'Authentication failed. Wrong password.');
+        return;
       }
     });
   }
 }));
 
 // Update a user
-// router.put('/:id', asyncHandler(async (req, res) => {
-//   if (req.body._id) delete req.body._id;
-//   const user = await User.findById(req.params.id);
-//   if (user) {
-//     if (!req.body.password) {
-//       user.username = req.body.username;
-//       user.email = req.body.email;
-//       user.address = req.body.address;
-//       user.phone = req.body.phone;
-//       user.pic = req.body.pic;
-//     } else {
-//       user.password = req.body.password;
-//     }
-//     try {
-//       await user.save();
-//       responseHandler.success(res, 'User Information Updated Sucessfully', { user: user });
-//     } catch (error) {
-//       responseHandler.badRequest(res, 'Update failed. username is duplicated.');
-//     }
-//   } else {
-//     responseHandler.notFound(res, 'Update failed. User not found.');
-//   }
-// }));
+router.put('/:id', asyncHandler(async (req, res) => {
+  if (req.body._id) delete req.body._id;
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.password = req.body.password;
+    try {
+      await user.save();
+      responseHandler.success(res, 'User Information Updated Sucessfully', { user: user });
+    } catch (error) {
+      responseHandler.badRequest(res, 'Update failed. username is duplicated.');
+    }
+  } else {
+    responseHandler.notFound(res, 'Update failed. User not found.');
+  }
+}));
 
 // Delete a user
 router.delete('/:id', asyncHandler(async (req, res) => {
