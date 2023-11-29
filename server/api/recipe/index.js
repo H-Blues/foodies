@@ -13,6 +13,19 @@ router.get('/', asyncHandler(async (req, res) => {
   }
 }));
 
+router.get('/length', asyncHandler(async (req, res) => {
+  try {
+    const recipe = await Recipe.findOne().sort({ id: -1 });
+    if (recipe) {
+      responseHandler.success(res, 'Successfully fetched length.', recipe.id);
+    } else {
+      responseHandler.notFound(res, 'No recipe found.');
+    }
+  } catch (err) {
+    responseHandler.error(res, 'Error fetching recipes id');
+  }
+}));
+
 router.get('/:recipeId', asyncHandler(async (req, res) => {
   try {
     const recipe = await Recipe.findOne({ id: req.params.recipeId });

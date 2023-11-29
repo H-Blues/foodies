@@ -3,7 +3,7 @@ import { CloudUpload } from '@material-ui/icons';
 import NavBar from '../../../components/NavBar/NavBar';
 import Footer from '../../../components/Footer/Footer';
 import UserContext from '../../../context/UserContext/UserContext';
-import { createRecipe } from '../../../api';
+import { createRecipe, fetchRecipeLength } from '../../../api';
 
 const RecipeUploadPage = () => {
   const { userInfo, updateUserInPage } = useContext(UserContext);
@@ -44,7 +44,7 @@ const RecipeUploadPage = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setRecipe((prevRecipe) => ({ ...prevRecipe, imagePreview: e.target.result, image: file }));
+        setRecipe((prevRecipe) => ({ ...prevRecipe, image: e.target.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -52,8 +52,8 @@ const RecipeUploadPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    const recipeToSend = { ...recipe, userId: userInfo.id };
+    const length = await fetchRecipeLength();
+    const recipeToSend = { ...recipe, id: length.data + 1 };
     const result = await createRecipe(recipeToSend);
     if (result.success) {
       const updatedUserInfo = { ...userInfo, publish: [...userInfo.publish, result.data.nextId] };
@@ -99,8 +99,8 @@ const RecipeUploadPage = () => {
                       onChange={handleImageUpload}
                       className="hidden"
                     />
-                    {recipe.imagePreview && (
-                      <img src={recipe.imagePreview} alt="Preview" className="mt-4 w-full h-2/3" />
+                    {recipe.image && (
+                      <img src={recipe.image} alt="Preview" className="mt-4 w-full h-2/3" />
                     )}
                   </div>
                   {/* Ingredients */}

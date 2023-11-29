@@ -34,6 +34,15 @@ export const deleteOneUser = () => {
 }
 
 // Recipe
+export const fetchRecipeLength = async () => {
+  return fetch(`/api/recipe/length`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'get'
+  }).then(res => res.json());
+};
+
 export const fetchRecipeById = async (recipeId) => {
   return fetch(`/api/recipe/${recipeId}`, {
     headers: {
