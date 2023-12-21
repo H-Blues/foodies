@@ -102,6 +102,14 @@ export default function Profile() {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => { setValue(newValue); };
 
+  const handleViewClick = (id) => {
+    history.push(`/demo-food/${id}`)
+  };
+
+  const handleEditClick = (id) => {
+
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (userInfo) {
@@ -171,8 +179,8 @@ export default function Profile() {
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button size="small" color="primary"> View </Button>
-                            <Button size="small" color="primary"> Edit </Button>
+                            <Button size="small" color="primary" onClick={() => { handleViewClick(card.id) }}> View </Button>
+                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.id) }}> Edit </Button>
                           </CardActions>
                         </Card>
                       </Grid>)))
@@ -192,8 +200,8 @@ export default function Profile() {
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button size="small" color="primary"> View </Button>
-                            <Button size="small" color="primary"> Edit </Button>
+                            <Button size="small" color="primary" onClick={() => { handleViewClick(card.id) }}> View </Button>
+                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.id) }}> Edit </Button>
                           </CardActions>
                         </Card>
                       </Grid>)))

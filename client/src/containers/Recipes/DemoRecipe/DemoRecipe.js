@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment, useContext } from "react";
-import axios from "axios";
 
-import classes from "./Recipe.module.css";
+import classes from "./DemoRecipe.module.css";
 import Table from "../Table/Table";
+import { fetchRecipeById } from "../../../api";
 import ThemeContext from "../../../context/ThemeContext/ThemeContext";
 
 function Recipe(props) {
@@ -17,15 +17,10 @@ function Recipe(props) {
     // eslint-disable-next-line
   }, []);
 
-  const getRecipe = () => {
-    axios
-      .get(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${props.id}`
-      )
-      .then((res) => {
-        setRecipe(...res.data.meals);
-        setLoading(false);
-      });
+  const getRecipe = async () => {
+    const recipe = await fetchRecipeById(props.id)
+    setRecipe(recipe.data)
+    setLoading(false)
   };
 
   let theme;
@@ -40,7 +35,7 @@ function Recipe(props) {
 
   if (loading) {
     food = (
-      <div className={props.expand}>
+      <div className={props.id}>
         <div
           style={{ color: theme }}
           className={[
@@ -54,72 +49,40 @@ function Recipe(props) {
       </div>
     );
   } else if (recipe !== undefined) {
-    let rules = recipe.strInstructions
-      .split("/d*\\r\\n/g")[0]
-      .split(".")
-      .filter((i) => i !== "");
+    let rules = recipe.instructions
     // console.log(rules);
 
-    let items = [];
-    for (let i = 1; i <= 20; i++) {
-      items.push(recipe[`strIngredient${i}`]);
-    }
-    items = items.filter((item) => {
-      return item !== "" && item !== null;
-    });
-
-    let amt = [];
-    for (let i = 1; i <= 20; i++) {
-      amt.push(recipe[`strMeasure${i}`]);
-    }
-    amt = amt.filter((item) => {
-      return item !== "" && item !== null;
-    });
-
     let ingredients = [];
-    items.forEach((item, index) => {
-      let amount = amt[index];
-      if (amount === " ") {
-        amount = "As per taste";
-      } else if (!isNaN(amount)) {
-        amount += " piece(s)";
-      }
+    for (let i = 0; i < recipe.ingredients.length; i++) {
+      let amount = recipe.ingredients[i]?.quantity
+      let item = recipe.ingredients[i]?.name
+
       ingredients.push([`${item}`, `${amount}`]);
-    });
+    };
 
     let video;
 
-    if (recipe.strYoutube !== "") {
-      video =
-        "https://www.youtube.com/embed/" +
-        recipe.strYoutube.split("=")[1];
+    if (recipe.videoUrl !== "") {
+      video = recipe.videoUrl
     }
 
     food = (
-      <div className={props.expand}>
+      <div className={props.id}>
         <div className="container p-12">
           <div className="flex hero flex-row lg:flex-col mt-4 mb-8">
             <div className="p-6 my-auto">
-              <a
-                href={
-                  recipe.strSource
-                    ? recipe.strSource
-                    : `/food/${recipe.idMeal}`
-                }
-              >
-                <img
-                  src={recipe.strMealThumb}
-                  className={[
-                    classes.Image,
-                    "shadow-xl",
-                  ].join(" ")}
-                  alt="foodies"
-                />
-              </a>
+              <img
+                src={recipe.image}
+                className={[
+                  classes.Image,
+                  "shadow-xl",
+                ].join(" ")}
+                alt="foodies"
+              />
             </div>
             <div className="container">
               <h1 className="text-6xl text-copy-primary lg:text-center leading-tight mb-2 pl-6 py-2">
-                {recipe.strMeal}
+                {recipe.title}
               </h1>
               <div className="container lg:mx-auto pl-6 py-1 w-5/6">
                 <Table ingredients={ingredients} />
@@ -134,7 +97,7 @@ function Recipe(props) {
               </span>
             </h1>
             <p className="text-lg text-copy-white text-gray-800 text-justify sm:text-left px-12 md:px-4 sm:px-0 my-4 py-6">
-              {rules.join(".")}
+              {rules}
             </p>
           </div>
           {video ? (
@@ -145,7 +108,7 @@ function Recipe(props) {
               ].join(" ")}
             >
               <iframe
-                title={recipe.idMeal}
+                title={recipe.title}
                 width="315"
                 height="560"
                 src={video}

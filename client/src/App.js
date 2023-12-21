@@ -6,6 +6,7 @@ import FoodProvider from "./context/FoodContext/FoodProvider";
 import UserProvider from "./context/UserContext/UserProvider";
 import Page from "./containers/Page/Page";
 import Recipes from "./containers/Recipes/Recipes";
+import DemoRecipes from "./containers/Recipes/DemoRecipes";
 import RecipeUploadPage from "./containers/Recipes/RecipeUpload/RecipeUploadPage";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import LoginPage from "./containers/LoginPage/LoginPage";
@@ -33,6 +34,7 @@ function App() {
                             <Route path="/register" component={RegisterPage} />
                             <Route path="/user" component={ProfilePage} />
                             <Route path="/food/:id" component={Recipes} />
+                            <Route path="/demo-food/:id" component={DemoRecipes} />
                             <Route path="/add-food" component={RecipeUploadPage} />
                             <Route component={PageNotFound} />
                         </Switch>
