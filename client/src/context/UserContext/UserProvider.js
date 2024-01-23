@@ -33,6 +33,35 @@ class UserProvider extends React.Component {
     this.setState({ isAuthenticated: true });
   }
 
+  addFavourite = (value) => {
+    this.setState({
+      userInfo: {
+        ...this.state.userInfo,
+        likes: [...this.state.userInfo.likes, value]
+      }
+    })
+  }
+
+  removeFavourite = (value) => {
+    let newFavourites = this.state.userInfo.likes.filter(item => item !== value);
+    this.setState({
+      userInfo: {
+        ...this.state.userInfo,
+        likes: newFavourites
+      }
+    })
+  }
+
+  publish = (value) => {
+    this.setState({
+      userInfo: {
+        ...this.state.userInfo,
+        publish: [...this.state.userInfo.publish, value]
+      }
+    })
+  }
+
+
   setToken = (value) => {
     this.setState({ authToken: value });
     localStorage.setItem("token", value);
@@ -66,6 +95,8 @@ class UserProvider extends React.Component {
           authenticate: this.authenticate,
           setToken: this.setToken,
           updateTheme: this.updateTheme,
+          addFavouriteInPage: this.addFavourite,
+          removeFavouriteInPage: this.removeFavourite,
         }}
       >
         {this.props.children}

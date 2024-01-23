@@ -65,7 +65,7 @@ function NavBar() {
                                 {userInfo.username}
                             </span>
                         </Link>) : (
-                        <Link to="Login/">
+                        <Link to="/login">
                             <span className="font-semibold ml-2 text-xl tracking-tight">
                                 Login
                             </span>
