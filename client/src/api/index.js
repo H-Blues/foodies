@@ -81,3 +81,21 @@ export const deleteRecipe = async (recipeId) => {
   }).then(res => res.json());
 };
 
+// Favorite
+export const addFavorite = async (userId, recipeId) => {
+  return fetch(`/api/favourites/${userId}/${recipeId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'put',
+  }).then(res => res.json());
+};
+
+export const removeFavorite = async (userId, recipeId) => {
+  return fetch(`/api/favourites/${userId}/${recipeId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'delete',
+  }).then(res => res.json());
+};
