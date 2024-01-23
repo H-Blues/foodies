@@ -3,8 +3,8 @@ const users = [
     'username': 'user1',
     'email': 'example1@gmail.com',
     'password': 'test1',
-    "likes": [1, 2, 3, 4],
-    "publish": [5, 6, 7]
+    "likes": [],
+    "publish": [1, 2, 3, 4, 5, 7]
   },
   // {
   //   'username': 'user2',
