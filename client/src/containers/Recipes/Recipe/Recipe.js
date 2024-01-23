@@ -1,21 +1,49 @@
 import React, { useState, useEffect, Fragment, useContext } from "react";
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
-
 import classes from "./Recipe.module.css";
 import Table from "../Table/Table";
 import ThemeContext from "../../../context/ThemeContext/ThemeContext";
+import UserContext from "../../../context/UserContext/UserContext";
+import { addFavorite, removeFavorite } from "../../../api";
+import { IconButton } from "@material-ui/core";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 
 function Recipe(props) {
   const context = useContext(ThemeContext);
+  const { userInfo, addFavouriteInPage, removeFavouriteInPage } = useContext(UserContext);
 
   const [recipe, setRecipe] = useState();
   const [loading, setLoading] = useState(false);
+  const [liked, setLiked] = useState(userInfo.likes.some((id) => id == props.id));
+
+  const history = useHistory();
 
   useEffect(() => {
     setLoading(true);
     getRecipe();
     // eslint-disable-next-line
   }, []);
+
+  const handleClick = async () => {
+    if (userInfo.id === null) {
+      alert("Sorry, you need to login firstly.")
+      history.push('/login');
+    }
+    if (!liked) {
+      const result = await addFavorite(userInfo.id, props.id);
+      if (result.success) {
+        addFavouriteInPage(props.id);
+        setLiked(true);
+      }
+    } else {
+      const result = await removeFavorite(userInfo.id, props.id);
+      if (result.success) {
+        removeFavouriteInPage(props.id);
+        setLiked(false);
+      }
+    }
+  };
 
   const getRecipe = () => {
     axios
@@ -116,6 +144,14 @@ function Recipe(props) {
                   alt="foodies"
                 />
               </a>
+              <IconButton onClick={handleClick} size="large" style={{
+                color: liked ? 'red' : 'gray',
+                cursor: 'pointer',
+                outline: 'none',
+              }}>
+                {liked ? <Favorite /> : <FavoriteBorder />}
+              </IconButton>
+              {liked ? <span style={{ color: 'red' }}>Awesome Food ! 👍</span> : <span style={{ color: theme }}>Add to Favorites</span>}
             </div>
             <div className="container">
               <h1 className="text-6xl text-copy-primary lg:text-center leading-tight mb-2 pl-6 py-2">

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
+import axios from "axios";
 import { Button, Card, CardActions, CardContent, CardMedia } from "@material-ui/core";
 import { Grid, Paper, Typography, Container, Tabs, Tab } from "@material-ui/core"
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -103,7 +104,11 @@ export default function Profile() {
   const handleChange = (event, newValue) => { setValue(newValue); };
 
   const handleViewClick = (id) => {
-    history.push(`/demo-food/${id}`)
+    if (id >= 1 && id <= 7) {
+      history.push(`/demo-food/${id}`);
+    } else {
+      history.push(`/food/${id}`);
+    }
   };
 
   const handleEditClick = (id) => {
@@ -124,16 +129,18 @@ export default function Profile() {
         );
         setPublishedRecipes(publishedRecipesData);
 
-        const likedRecipesData = await Promise.all(
-          userInfo.likes.map(async (id) => {
-            const response = await fetchRecipeById(id);
-            if (response && response.success) {
-              return response.data;
-            }
-            return null;
-          })
-        );
-        setLikedRecipes(likedRecipesData);
+        if (userInfo) {
+          const likedRecipesData = await Promise.all(
+            userInfo.likes.map(async (id) => {
+              const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+              if (response) {
+                return response.data.meals[0];
+              }
+              return null;
+            })
+          );
+          setLikedRecipes(likedRecipesData);
+        }
       }
     };
 
@@ -162,25 +169,25 @@ export default function Profile() {
               Upload Recipe
             </Button>
 
-            <Container className={classes.cardGrid}>
+            <Container className={classes.cardGrid} key='cards'>
               {likedRecipes && publishedRecipes && (
                 <Grid container spacing={4}>
                   {value === 0 && (
                     likedRecipes.map((card) => (
-                      <Grid item key={card.id} xs={12} sm={6} md={4}>
+                      <Grid item key={card.idMeal} xs={12} sm={6} md={4}>
                         <Card className={classes.card}>
-                          <CardMedia className={classes.cardMedia} image={card.image} title="FoodImg" />
+                          <CardMedia className={classes.cardMedia} image={card.strMealThumb} title="FoodImg" />
                           <CardContent className={classes.cardContent}>
                             <Typography gutterBottom variant="h5" component="h2">
-                              {card.title}
+                              {card.strMeal}
                             </Typography>
                             <Typography>
-                              {card.instructions.slice(0, 60) + "..."}
+                              {card.strInstructions.slice(0, 60) + "..."}
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button size="small" color="primary" onClick={() => { handleViewClick(card.id) }}> View </Button>
-                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.id) }}> Edit </Button>
+                            <Button size="small" color="primary" onClick={() => { handleViewClick(card.idMeal) }}> View </Button>
+                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.idMeal) }}> Edit </Button>
                           </CardActions>
                         </Card>
                       </Grid>)))
