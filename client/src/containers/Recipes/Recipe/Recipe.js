@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import axios from "axios";
 import classes from "./Recipe.module.css";
 import Table from "../Table/Table";
+import CommentBox from "../Comment/CommentBox";
 import ThemeContext from "../../../context/ThemeContext/ThemeContext";
 import UserContext from "../../../context/UserContext/UserContext";
 import { addFavorite, removeFavorite } from "../../../api";
@@ -192,6 +193,7 @@ function Recipe(props) {
             </div>
           ) : null}
         </div>
+        <CommentBox />
       </div>
     );
 
