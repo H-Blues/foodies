@@ -4,6 +4,7 @@ import passport from './authenticate/index.js';
 import usersRouter from './api/user/index.js';
 import recipeRouter from './api/recipe/index.js';
 import favouriteRouter from './api/favourite/index.js';
+import commentRouter from './api/comment/index.js';
 import './db/index.js';
 import './seed/index.js';
 
@@ -25,7 +26,7 @@ app.use(passport.initialize());
 app.use('/api/user', usersRouter);
 app.use('/api/recipe', recipeRouter);
 app.use('/api/favourites', favouriteRouter);
-// app.use('/api/genres', genresRouter);
+app.use('/api/comments', commentRouter);
 // app.use('/api/movies', passport.authenticate('jwt', { session: false }), moviesRouter);
 // app.use('/api/tv', passport.authenticate('jwt', { session: false }), tvRouter);
 // app.use('/api/people', passport.authenticate('jwt', { session: false }), peopleRouter);

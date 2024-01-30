@@ -2,6 +2,8 @@ import userModel from '../api/user/userModel.js';
 import users from './user.js';
 import recipeModel from '../api/recipe/recipeModel.js';
 import recipes from './recipe.js';
+import commentModel from '../api/comment/commentModel.js';
+import comments from './comment.js';
 
 import dotenv from 'dotenv';
 
@@ -29,7 +31,25 @@ async function loadRecipes() {
   }
 }
 
+async function loadComments() {
+  console.log('loading comment Data...');
+  try {
+    await commentModel.deleteMany();
+    await comments.forEach(comment => commentModel.create(comment));
+    console.info(`${comments.length} comments were successfully stored.`);
+  } catch (err) {
+    console.error(`failed to Load comment Data: ${err}`);
+  }
+}
+
+if (process.env.LOAD_SEED_DATA) {
+  loadUsers();
+  loadRecipes();
+  loadComments();
+}
+
 if (process.env.SEED_DB) {
   loadUsers();
   loadRecipes();
+  loadComments();
 }
