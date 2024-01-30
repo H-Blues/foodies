@@ -49,7 +49,7 @@ export const fetchRecipeById = async (recipeId) => {
       'Content-Type': 'application/json'
     },
     method: 'get'
-  }).then(res => res.json());
+  }).then(res => res);
 };
 
 export const createRecipe = async (recipeData) => {
@@ -99,3 +99,42 @@ export const removeFavorite = async (userId, recipeId) => {
     method: 'delete',
   }).then(res => res.json());
 };
+
+// Comments
+export const getCommentsById = async (recipeId) => {
+  return fetch(`/api/comments/${recipeId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'get',
+  }).then(res => res.json());
+}
+
+export const addComment = async (commentData) => {
+  return fetch(`/api/comments`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: commentData,
+    method: 'post',
+  }).then(res => res.json());
+}
+
+export const editComment = async (commentId, commentData) => {
+  return fetch(`/api/comments/${commentId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: commentData,
+    method: 'put',
+  }).then(res => res.json());
+}
+
+export const deleteComment = async (commentId) => {
+  return fetch(`/api/comments/${commentId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'delete',
+  }).then(res => res.json());
+}

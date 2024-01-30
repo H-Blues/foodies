@@ -16,7 +16,7 @@ function Recipe(props) {
 
   const [recipe, setRecipe] = useState();
   const [loading, setLoading] = useState(false);
-  const [liked, setLiked] = useState(userInfo.likes.some((id) => id == props.id));
+  const [liked, setLiked] = useState(userInfo.likes.some((id) => id === props.id));
 
   const history = useHistory();
 
@@ -145,14 +145,14 @@ function Recipe(props) {
                   alt="foodies"
                 />
               </a>
-              <IconButton onClick={handleClick} size="large" style={{
+              <IconButton onClick={handleClick} style={{
                 color: liked ? 'red' : 'gray',
                 cursor: 'pointer',
                 outline: 'none',
               }}>
                 {liked ? <Favorite /> : <FavoriteBorder />}
               </IconButton>
-              {liked ? <span style={{ color: 'red' }}>Awesome Food ! 👍</span> : <span style={{ color: theme }}>Add to Favorites</span>}
+              {liked ? <span style={{ color: 'red' }}>Awesome Food ! <span role="img" aria-label="awesome">👍</span></span> : <span style={{ color: theme }}>Add to Favorites</span>}
             </div>
             <div className="container">
               <h1 className="text-6xl text-copy-primary lg:text-center leading-tight mb-2 pl-6 py-2">
@@ -193,7 +193,7 @@ function Recipe(props) {
             </div>
           ) : null}
         </div>
-        <CommentBox />
+        <CommentBox id={props.id} />
       </div>
     );
 

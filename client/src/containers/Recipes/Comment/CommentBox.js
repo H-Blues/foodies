@@ -1,29 +1,51 @@
-import React, { useState, useContext } from "react";
-import { Divider, Avatar, Grid, Paper, TextField, Button, IconButton } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import UserContext from "../../../context/UserContext/UserContext";
+import { getCommentsById, addComment, editComment, deleteComment } from "../../../api";
+import { Divider, Avatar, Grid, Paper, TextField, Button, IconButton } from "@material-ui/core";
+import { Edit, Delete } from "@material-ui/icons";
 
 const imgLink = "https://source.unsplash.com/random";
 
-function CommentBox() {
+function CommentBox(props) {
+  const recipeId = props.id;
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const { userInfo } = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const response = await getCommentsById(recipeId);
+      setComments(response.data);
+    }
+
+    fetchComments();
+  }, [recipeId]);
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
   };
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (userInfo.username === "") {
       alert("Please login to comment");
       return;
     }
     if (comment.trim() !== "") {
-      setComments([...comments, comment]);
-      setComment("");
+      const commentObject = {
+        recipeId: recipeId,
+        username: userInfo.username,
+        content: comment,
+        date: new Date()
+      };
+      const response = await addComment(JSON.stringify(commentObject));
+      if (response.success) {
+        setComments([...comments, commentObject]);
+        setComment("");
+      } else {
+        alert("Failed to add comment");
+      }
     }
   };
 
@@ -45,21 +67,31 @@ function CommentBox() {
     }
   };
 
-  const handleEditComment = (index) => {
+  const handleEditComment = async (index) => {
     const updatedComments = [...comments];
-    const editedComment = window.prompt("Edit the comment", comments[index]);
-    if (editedComment !== null) {
-      updatedComments[index] = editedComment;
-      setComments(updatedComments);
+    const editedContent = window.prompt("Edit the comment", comments[index].content);
+    if (editedContent !== null) {
+      const response = await editComment(comments[index]._id, JSON.stringify({ content: editedContent }));
+      if (response.success) {
+        updatedComments[index].content = editedContent;
+        setComments(updatedComments);
+      } else {
+        alert("Failed to edit this comment.");
+      }
     }
   };
 
-  const handleDeleteComment = (index) => {
+  const handleDeleteComment = async (index) => {
     const updatedComments = [...comments];
     const confirmDelete = window.confirm("Are you sure you want to delete this comment?");
     if (confirmDelete) {
-      updatedComments.splice(index, 1);
-      setComments(updatedComments);
+      const response = await deleteComment(comments[index]._id);
+      if (response.success) {
+        updatedComments.splice(index, 1);
+        setComments(updatedComments);
+      } else {
+        alert("Failed to delete this comment.");
+      }
     }
   };
 
@@ -92,31 +124,36 @@ function CommentBox() {
             Submit
           </Button>
         </form>
+
         <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
-        {comments.map((comment, index) => (
-          <Grid container wrap="nowrap" spacing={3} key={index}>
-            <Grid item>
-              <Avatar alt="img" style={{ marginTop: "20px" }} src={imgLink} />
-            </Grid>
-            <Grid justifyContent="left" item xs zeroMinWidth>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h4 style={{ margin: 0, textAlign: "left" }}>{userInfo.username}</h4>
-                <div>
-                  <IconButton onClick={() => handleEditComment(index)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => handleDeleteComment(index)}>
-                    <Delete />
-                  </IconButton>
+        {
+          comments.map((comment, index) => (
+            <Grid container wrap="nowrap" spacing={3} key={index}>
+              <Grid item>
+                <Avatar alt="img" style={{ marginTop: "20px" }} src={imgLink} />
+              </Grid>
+              <Grid justifycontent="left" item xs zeroMinWidth>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h4 style={{ margin: 0, textAlign: "left" }}>{comment.username}</h4>
+                  {comment.username === userInfo.username && (
+                    <div>
+                      <IconButton onClick={() => handleEditComment(index)}>
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={() => handleDeleteComment(index)}>
+                        <Delete />
+                      </IconButton>
+                    </div>
+                  )}
                 </div>
-              </div>
-              <p style={{ textAlign: "left" }}>{comment}</p>
-              <p style={{ textAlign: "left", color: "gray" }}>
-                posted {formatTime(Date.now())}
-              </p>
+                <p style={{ textAlign: "left" }}>{comment.content}</p>
+                <p style={{ textAlign: "left", color: "gray" }}>
+                  posted {formatTime(comment.date)}
+                </p>
+              </Grid>
             </Grid>
-          </Grid>
-        ))}
+          ))
+        }
       </Paper>
     </div>
   );
