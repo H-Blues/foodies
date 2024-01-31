@@ -49,7 +49,7 @@ export const fetchRecipeById = async (recipeId) => {
       'Content-Type': 'application/json'
     },
     method: 'get'
-  }).then(res => res);
+  }).then(res => res.json());
 };
 
 export const createRecipe = async (recipeData) => {

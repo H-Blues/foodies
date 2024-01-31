@@ -187,7 +187,6 @@ export default function Profile() {
                           </CardContent>
                           <CardActions>
                             <Button size="small" color="primary" onClick={() => { handleViewClick(card.idMeal) }}> View </Button>
-                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.idMeal) }}> Edit </Button>
                           </CardActions>
                         </Card>
                       </Grid>)))
