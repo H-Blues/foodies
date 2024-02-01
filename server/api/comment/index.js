@@ -27,8 +27,8 @@ router.get('/:recipeId', asyncHandler(async (req, res) => {
 router.post('/', asyncHandler(async (req, res) => {
   const newComment = req.body;
   try {
-    await Comment.create(newComment);
-    responseHandler.created(res, 'Comment created successfully.');
+    const addedComment = await Comment.create(newComment);
+    responseHandler.success(res, 'Comment created successfully.', addedComment);
   } catch (error) {
     responseHandler.error(res, 'Failed to create comment.');
     console.log("Failed to add one comment:", error);

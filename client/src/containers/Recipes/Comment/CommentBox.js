@@ -41,7 +41,7 @@ function CommentBox(props) {
       };
       const response = await addComment(JSON.stringify(commentObject));
       if (response.success) {
-        setComments([...comments, commentObject]);
+        setComments([...comments, response.data]);
         setComment("");
       } else {
         alert("Failed to add comment");
