@@ -25,7 +25,7 @@ function Recipe(props) {
     setLoading(true);
     getRecipe();
     // eslint-disable-next-line
-  }, []);
+  }, [props]);
 
   const handleClick = async () => {
     if (userInfo.id === null) {

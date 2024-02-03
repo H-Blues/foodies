@@ -37,7 +37,7 @@ const RecommendBox = (props) => {
   useEffect(() => {
     getRecipe();
     // eslint-disable-next-line
-  }, [recipeId]);
+  }, []);
 
   const classes = useStyles();
 
@@ -52,7 +52,7 @@ const RecommendBox = (props) => {
       <Grid container spacing={2} className="flex justify-center">
         {recommends.map((recipe) => (
           <Grid item key={recipe.idMeal}>
-            <Link to={`/food/${recipe.idMeal}`} className={classes.cardLink}>
+            <Link to={`/food/${recipe.idMeal}`}>
               <Card className={classes.root}>
                 <img src={recipe.strMealThumb} alt={recipe.strMeal} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
                 <CardContent>
