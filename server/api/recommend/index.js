@@ -59,12 +59,13 @@ async function getRecommendations(area, category) {
   }
 }
 
-router.get('/', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
   const area = req.body.area;
   const category = req.body.category;
   try {
     const recommendations = await getRecommendations(area, category);
-    responseHandler.success(res, 'Recommended recipes fetched successfully', recommendations);
+    const limitedRecommendations = recommendations.slice(0, 5);
+    responseHandler.success(res, 'Recommended recipes fetched successfully', limitedRecommendations);
   } catch (err) {
     responseHandler.error(res, 'Error fetching recommended recipes');
   }

@@ -9,6 +9,7 @@ import UserContext from "../../../context/UserContext/UserContext";
 import { addFavorite, removeFavorite } from "../../../api";
 import { IconButton } from "@material-ui/core";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import RecommendBox from "../Recommend/RecommendBox";
 
 function Recipe(props) {
   const context = useContext(ThemeContext);
@@ -193,6 +194,7 @@ function Recipe(props) {
             </div>
           ) : null}
         </div>
+        <RecommendBox id={props.id} />
         <CommentBox id={props.id} />
       </div>
     );

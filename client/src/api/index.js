@@ -138,3 +138,18 @@ export const deleteComment = async (commentId) => {
     method: 'delete',
   }).then(res => res.json());
 }
+
+// Recommend
+export const getRecommend = async (area, category) => {
+  console.log(area, category)
+  return fetch(`/api/recommend`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      area: area,
+      category: category,
+    }),
+    method: 'post',
+  }).then(res => res.json());
+}
