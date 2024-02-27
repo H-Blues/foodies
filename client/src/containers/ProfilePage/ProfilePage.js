@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Card, CardActions, CardContent, CardMedia } from "@material-ui/core";
 import { Grid, Paper, Typography, Container, Tabs, Tab } from "@material-ui/core"
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { fetchRecipeById } from "../../api/index.js";
+import { fetchAllRecipes, fetchRecipeById } from "../../api/index.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Sidebar from "./Sidebar.js";
 import Navbar from '../../components/NavBar/NavBar'
@@ -104,7 +104,7 @@ export default function Profile() {
   const handleChange = (event, newValue) => { setValue(newValue); };
 
   const handleViewClick = (id) => {
-    if (id >= 1 && id <= 7) {
+    if (id >= 1 && id <= 100) {
       history.push(`/demo-food/${id}`);
     } else {
       history.push(`/food/${id}`);
@@ -118,15 +118,17 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserData = async () => {
       if (userInfo) {
-        const publishedRecipesData = await Promise.all(
-          userInfo.publish.map(async (id) => {
-            const response = await fetchRecipeById(id);
-            if (response && response.success) {
-              return response.data;
-            }
-            return null;
-          })
-        );
+        const response = await fetchAllRecipes();
+        const publishedRecipesData = response.data;
+        // const publishedRecipesData = await Promise.all(
+        //   userInfo.publish.map(async (id) => {
+        //     const response = await fetchRecipeById(id);
+        //     if (response && response.success) {
+        //       return response.data;
+        //     }
+        //     return null;
+        //   })
+        // );
         setPublishedRecipes(publishedRecipesData);
 
         if (userInfo) {
@@ -207,7 +209,7 @@ export default function Profile() {
                           </CardContent>
                           <CardActions>
                             <Button size="small" color="primary" onClick={() => { handleViewClick(card.id) }}> View </Button>
-                            <Button size="small" color="primary" onClick={() => { handleEditClick(card.id) }}> Edit </Button>
+                            {/* <Button size="small" color="success" onClick={() => { handleEditClick(card.id) }}> Delete </Button> */}
                           </CardActions>
                         </Card>
                       </Grid>)))

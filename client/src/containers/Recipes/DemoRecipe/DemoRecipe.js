@@ -71,14 +71,17 @@ function Recipe(props) {
         <div className="container p-12">
           <div className="flex hero flex-row lg:flex-col mt-4 mb-8">
             <div className="p-6 my-auto">
-              <img
-                src={recipe.image}
-                className={[
-                  classes.Image,
-                  "shadow-xl",
-                ].join(" ")}
-                alt="foodies"
-              />
+              {
+                recipe.image ? <img
+                  src={recipe.image}
+                  className={[
+                    classes.Image,
+                    "shadow-xl",
+                  ].join(" ")}
+                  alt="foodies"
+                /> : <></>
+              }
+
             </div>
             <div className="container">
               <h1 className="text-6xl text-copy-primary lg:text-center leading-tight mb-2 pl-6 py-2">
